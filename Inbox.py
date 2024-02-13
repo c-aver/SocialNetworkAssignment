@@ -3,6 +3,9 @@ from Notifications import *
 
 
 class Inbox:
+    """
+    A subscriber class for collecting notifications for a user
+    """
     owner_name: str
     notifications: List[Notification]
 

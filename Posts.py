@@ -76,6 +76,15 @@ class SalePost(Post):
 
 
 def create_post(poster: 'User', post_type: str, text: str, price: int, location: str) -> Post:
+    """
+    Factory method to create an instance of Post
+    :param poster: user to be defined as the poster
+    :param post_type: the type of the post, one of ("Text", "Image", "Sale")
+    :param text: the content of the post
+    :param price: for SalePost - the initial price
+    :param location: for SalePost - the location
+    :return: the newly created Post
+    """
     new_post: Post
     if post_type == "Text":
         new_post = TextPost(poster, text)

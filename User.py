@@ -1,6 +1,7 @@
 from __future__ import annotations
 import hashlib
-from Posts import *
+from Posts import Post, create_post
+from Notifications import NewPostNotification, Notification
 from typing import Set, List
 from Inbox import Inbox
 
@@ -73,8 +74,9 @@ class User:
 
     def publish_post(self, post_type: str, text: str, price: int = 0, location: str = ""):
         self.check_login("publish post")
-        new_post: 'Post' = create_post(self, post_type, text, price, location)
+        new_post: Post = create_post(self, post_type, text, price, location)
         self.__posts.append(new_post)
+        # publish the post notification to all subscribers
         for inbox in self.__follower_inboxes:
             inbox.notify(NewPostNotification(self))
         return new_post
