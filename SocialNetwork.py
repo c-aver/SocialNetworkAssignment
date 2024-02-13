@@ -1,4 +1,5 @@
 from User import User
+from typing import Dict
 
 
 _instance = None
@@ -11,7 +12,7 @@ def instance():
 class SocialNetwork:
 
     name: str
-    users: dict[str, User] = {}
+    users: Dict[str, User] = {}
 
     def __init__(self, net_name: str):
         global _instance
@@ -20,6 +21,9 @@ class SocialNetwork:
         self.name = net_name
         _instance = self
         print(f"The social network {self.name} was created!")
+
+    def __str__(self):
+        return f"{self.name} social network:\n" + "\n".join([str(user) for user in self.users.values()]) + "\n"
 
     def sign_up(self, username: str, password: str) -> User:
         if not 4 <= len(password) <= 8:
@@ -31,11 +35,11 @@ class SocialNetwork:
         return new_user
 
     def log_out(self, username: str) -> None:
-        if username not in self.users:
+        if self.users.get(username) is None:
             raise RuntimeError(f"User {username} does not exist")
         self.users.get(username).log_out()
 
     def log_in(self, username: str, password: str) -> None:
-        if username not in self.users:
+        if self.users.get(username) is None:
             raise RuntimeError(f"User {username} does not exist")
         self.users.get(username).log_in(password)
