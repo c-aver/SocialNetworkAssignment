@@ -1,28 +1,28 @@
-from Notification import *
+from Notifications import *
 from typing import Set, List, Tuple
 
 
 class Post:
     poster: 'User'
 
-    text: str
+    content: str
 
     likes: Set['User'] = set()
     comments: List[Tuple['User', str]] = []
 
     def __init__(self, poster: 'User', text: str):
         self.poster = poster
-        self.text = text
+        self.content = text
 
     def like(self, liker: 'User'):
         self.likes.add(liker)
         if liker != self.poster:
-            self.poster.notify(NewLikeNotification(liker))
+            self.poster.inbox.notify(NewLikeNotification(liker))
 
     def comment(self, commenter: 'User', text: str):
         self.comments.append((commenter, text))
         if commenter != self.poster:
-            self.poster.notify(NewCommentNotification(commenter), text)
+            self.poster.inbox.notify(NewCommentNotification(commenter), text)
 
 
 class TextPost(Post):
@@ -32,7 +32,7 @@ class TextPost(Post):
 
     def __str__(self):
         return (f"{self.poster.name} published a post:\n"
-                f"\"" + self.text + "\"\n")
+                f"\"" + self.content + "\"\n")
 
 
 class ImagePost(Post):
@@ -71,7 +71,8 @@ class SalePost(Post):
 
     def __str__(self):
         return (f"{self.poster.name} posted a product for sale:\n"
-                + ("Sold" if self.already_sold else "For sale") + f"! {self.text}, price: {self.price}, pickup from: {self.location}\n")
+                + ("Sold" if self.already_sold else "For sale")
+                + f"! {self.content}, price: {self.price}, pickup from: {self.location}\n")
 
 
 def create_post(poster: 'User', post_type: str, text: str, price: int, location: str) -> Post:

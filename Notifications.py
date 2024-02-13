@@ -1,5 +1,6 @@
 class Notification:
     other: 'User'
+
     def __init__(self, other: 'User'):
         self.other = other
 
@@ -18,6 +19,7 @@ class NewLikeNotification(Notification):
 
     def __str__(self):
         return f"{self.other.name} liked your post"
+
 
 class NewCommentNotification(Notification):
     def __init__(self, commenter: 'User'):

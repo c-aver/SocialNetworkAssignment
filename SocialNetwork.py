@@ -6,6 +6,9 @@ _instance = None
 
 
 def instance():
+    global _instance
+    if _instance is None:
+        _instance = SocialNetwork("Default")
     return _instance
 
 
@@ -22,7 +25,7 @@ class SocialNetwork:
         _instance = self
         print(f"The social network {self.name} was created!")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.name} social network:\n" + "\n".join([str(user) for user in self.users.values()]) + "\n"
 
     def sign_up(self, username: str, password: str) -> User:
