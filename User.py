@@ -1,3 +1,4 @@
+from __future__ import annotations
 import hashlib
 from Posts import *
 from typing import Set, List
@@ -54,20 +55,20 @@ class User:
         self.__logged_in = True
         print(f"{self.__name} connected")
 
-    def follow(self, other: 'User') -> None:
+    def follow(self, other: User) -> None:
         self.check_login("follow a user")
         print(f"{self.__name} started following {other.__name}")
         other.add_follower(self)
 
-    def add_follower(self, other: 'User') -> None:
+    def add_follower(self, other: User) -> None:
         self.__follower_inboxes.add(other.__inbox)
 
-    def unfollow(self, other: 'User') -> None:
+    def unfollow(self, other: User) -> None:
         self.check_login("unfollow a user")
         print(f"{self.__name} unfollowed {other.__name}")
         other.remove_follower(self)
 
-    def remove_follower(self, other: 'User') -> None:
+    def remove_follower(self, other: User) -> None:
         self.__follower_inboxes.remove(other.__inbox)
 
     def publish_post(self, post_type: str, text: str, price: int = 0, location: str = ""):

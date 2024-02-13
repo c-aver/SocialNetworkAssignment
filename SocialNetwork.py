@@ -37,11 +37,13 @@ class SocialNetwork:
         return new_user
 
     def log_out(self, username: str) -> None:
-        if self.__users.get(username) is None:
+        user: User | None = self.__users.get(username)
+        if user is None:
             raise RuntimeError(f"User {username} does not exist")
-        self.__users.get(username).log_out()
+        user.log_out()
 
     def log_in(self, username: str, password: str) -> None:
-        if self.__users.get(username) is None:
+        user: User | None = self.__users.get(username)
+        if user is None:
             raise RuntimeError(f"User {username} does not exist")
-        self.__users.get(username).log_in(password)
+        user.log_in(password)
