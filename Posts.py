@@ -1,5 +1,7 @@
 from Notifications import *
 from typing import Set, List, Tuple, Union
+import matplotlib.pyplot as plt
+import matplotlib.image as img
 
 
 class Post:
@@ -41,6 +43,13 @@ class ImagePost(Post):
         print(self)
 
     def display(self) -> None:
+        try:
+            plt.imshow(img.imread(self.content))
+            plt.axis("off")
+            plt.tight_layout()
+            plt.show()
+        except FileNotFoundError:
+            pass    # if it's not found, skip the displaying
         print("Shows picture")
 
     def __str__(self) -> str:
