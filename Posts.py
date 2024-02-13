@@ -1,3 +1,5 @@
+import logging
+
 from Notifications import *
 from typing import Set, List, Tuple, Union
 import matplotlib.pyplot as plt
@@ -47,9 +49,10 @@ class ImagePost(Post):
             plt.imshow(img.imread(self.content))
             plt.axis("off")
             plt.tight_layout()
-            plt.show()
-        except FileNotFoundError:
-            pass    # if it's not found, skip the displaying
+            plt.show(block=False)
+        except Exception as e:
+            logging.exception(e)
+            pass    # if something went wrong, just skip the displaying
         print("Shows picture")
 
     def __str__(self) -> str:
