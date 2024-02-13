@@ -6,7 +6,7 @@ class Notification:
 
 
 class NewPostNotification(Notification):
-    def __init__(self, poster):
+    def __init__(self, poster) -> None:
         super().__init__(poster)
 
     def __str__(self) -> str:
@@ -14,7 +14,7 @@ class NewPostNotification(Notification):
 
 
 class NewLikeNotification(Notification):
-    def __init__(self, liker: 'User'):
+    def __init__(self, liker: 'User') -> None:
         super().__init__(liker)
 
     def __str__(self) -> str:

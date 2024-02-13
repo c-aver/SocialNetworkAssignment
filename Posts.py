@@ -1,5 +1,5 @@
 from Notifications import *
-from typing import Set, List, Tuple
+from typing import Set, List, Tuple, Union
 
 
 class Post:
@@ -14,12 +14,12 @@ class Post:
         self.poster = poster
         self.content = text
 
-    def like(self, liker: 'User'):
+    def like(self, liker: 'User') -> None:
         self.likes.add(liker)
         if liker != self.poster:
             self.poster.notify(NewLikeNotification(liker))
 
-    def comment(self, commenter: 'User', text: str):
+    def comment(self, commenter: 'User', text: str) -> None:
         self.comments.append((commenter, text))
         if commenter != self.poster:
             self.poster.notify(NewCommentNotification(commenter, text))
@@ -30,7 +30,7 @@ class TextPost(Post):
         super().__init__(poster, text)
         print(self)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return (f"{self.poster.get_name()} published a post:\n"
                 f"\"" + self.content + "\"\n")
 
@@ -40,15 +40,15 @@ class ImagePost(Post):
         super().__init__(poster, text)
         print(self)
 
-    def display(self):
+    def display(self) -> None:
         print("Shows picture")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.poster.get_name()} posted a picture\n"
 
 
 class SalePost(Post):
-    price: int | float
+    price: Union[int, float]
     location: str
     already_sold: bool
 
