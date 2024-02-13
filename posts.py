@@ -1,12 +1,14 @@
+"""This module holds the posts classes with their hierarchy"""
 import logging
-
-from Notifications import *
+from abc import ABC, abstractmethod
 from typing import Set, List, Tuple, Union
 import matplotlib.pyplot as plt
 import matplotlib.image as img
+from notifications import NewCommentNotification, NewLikeNotification
 
 
-class Post:
+class Post(ABC):
+    """The abstract class for a post with its basic information"""
     poster: 'User'
 
     content: str
@@ -18,18 +20,25 @@ class Post:
         self.poster = poster
         self.content = text
 
+    @abstractmethod
+    def __str__(self) -> str:
+        pass
+
     def like(self, liker: 'User') -> None:
+        """Notifies the post that a user has liked it"""
         self.likes.add(liker)
         if liker != self.poster:
             self.poster.notify(NewLikeNotification(liker))
 
     def comment(self, commenter: 'User', text: str) -> None:
+        """Notifies the post that a user has commented on it"""
         self.comments.append((commenter, text))
         if commenter != self.poster:
             self.poster.notify(NewCommentNotification(commenter, text))
 
 
 class TextPost(Post):
+    """A concrete class for a text post"""
     def __init__(self, poster: 'User', text: str):
         super().__init__(poster, text)
         print(self)
@@ -40,19 +49,20 @@ class TextPost(Post):
 
 
 class ImagePost(Post):
+    """A concrete class for an image post"""
     def __init__(self, poster: 'User', text: str):
         super().__init__(poster, text)
         print(self)
 
     def display(self) -> None:
+        """Attempts to display the image within the post"""
         try:
             plt.imshow(img.imread(self.content))
             plt.axis("off")
             plt.tight_layout()
             plt.show(block=False)
-        except Exception as e:
+        except Exception as e:      # if we failed, that's fine # pylint: disable=broad-exception-caught
             logging.exception(e)
-            pass    # if something went wrong, just skip the displaying
         print("Shows picture")
 
     def __str__(self) -> str:
@@ -60,6 +70,7 @@ class ImagePost(Post):
 
 
 class SalePost(Post):
+    """A concrete class for a sale post"""
     price: Union[int, float]
     location: str
     already_sold: bool
@@ -72,11 +83,13 @@ class SalePost(Post):
         print(self)
 
     def discount(self, discount: int, password: str) -> None:
+        """Sets a discount on the sale, given the seller password"""
         self.poster.authenticate(password)
-        self.price = self.price - self.price*discount/100
+        self.price -= self.price*discount/100
         print(f"Discount on {self.poster.get_name()} product! the new price is: {self.price}")
 
     def sold(self, password: str) -> None:
+        """Defines the sale as sold, given the seller password"""
         self.poster.authenticate(password)
         self.already_sold = True
         print(f"{self.poster.get_name()}'s product is sold")
