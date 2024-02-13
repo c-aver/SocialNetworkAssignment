@@ -9,21 +9,27 @@ class NewPostNotification(Notification):
     def __init__(self, poster):
         super().__init__(poster)
 
-    def __str__(self):
-        return f"{self.other.name} has a new post"
+    def __str__(self) -> str:
+        return f"{self.other.get_name()} has a new post"
 
 
 class NewLikeNotification(Notification):
     def __init__(self, liker: 'User'):
         super().__init__(liker)
 
-    def __str__(self):
-        return f"{self.other.name} liked your post"
+    def __str__(self) -> str:
+        return f"{self.other.get_name()} liked your post"
 
 
 class NewCommentNotification(Notification):
-    def __init__(self, commenter: 'User'):
-        super().__init__(commenter)
+    __text: str
 
-    def __str__(self):
-        return f"{self.other.name} commented on your post"
+    def __init__(self, commenter: 'User', text: str):
+        super().__init__(commenter)
+        self.__text = text
+
+    def get_text(self) -> str:
+        return self.__text
+
+    def __str__(self) -> str:
+        return f"{self.other.get_name()} commented on your post"

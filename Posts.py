@@ -17,12 +17,12 @@ class Post:
     def like(self, liker: 'User'):
         self.likes.add(liker)
         if liker != self.poster:
-            self.poster.inbox.notify(NewLikeNotification(liker))
+            self.poster.notify(NewLikeNotification(liker))
 
     def comment(self, commenter: 'User', text: str):
         self.comments.append((commenter, text))
         if commenter != self.poster:
-            self.poster.inbox.notify(NewCommentNotification(commenter), text)
+            self.poster.notify(NewCommentNotification(commenter, text))
 
 
 class TextPost(Post):
@@ -31,7 +31,7 @@ class TextPost(Post):
         print(self)
 
     def __str__(self):
-        return (f"{self.poster.name} published a post:\n"
+        return (f"{self.poster.get_name()} published a post:\n"
                 f"\"" + self.content + "\"\n")
 
 
@@ -44,11 +44,11 @@ class ImagePost(Post):
         print("Shows picture")
 
     def __str__(self):
-        return f"{self.poster.name} posted a picture\n"
+        return f"{self.poster.get_name()} posted a picture\n"
 
 
 class SalePost(Post):
-    # price: int | float
+    price: int | float
     location: str
     already_sold: bool
 
@@ -59,18 +59,18 @@ class SalePost(Post):
         self.already_sold = False
         print(self)
 
-    def discount(self, discount: int, password: str):
+    def discount(self, discount: int, password: str) -> None:
         self.poster.authenticate(password)
         self.price = self.price - self.price*discount/100
-        print(f"Discount on {self.poster.name} product! the new price is: {self.price}")
+        print(f"Discount on {self.poster.get_name()} product! the new price is: {self.price}")
 
-    def sold(self, password: str):
+    def sold(self, password: str) -> None:
         self.poster.authenticate(password)
         self.already_sold = True
-        print(f"{self.poster.name}'s product is sold")
+        print(f"{self.poster.get_name()}'s product is sold")
 
-    def __str__(self):
-        return (f"{self.poster.name} posted a product for sale:\n"
+    def __str__(self) -> str:
+        return (f"{self.poster.get_name()} posted a product for sale:\n"
                 + ("Sold" if self.already_sold else "For sale")
                 + f"! {self.content}, price: {self.price}, pickup from: {self.location}\n")
 

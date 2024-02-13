@@ -10,11 +10,11 @@ class Inbox:
         self.owner_name = owner_name
         self.notifications = []
 
-    def notify(self, notification: Notification, comment: str = ""):
+    def notify(self, notification: Notification) -> None:
         self.notifications.append(notification)
         if not isinstance(notification, NewPostNotification):
-            print(f"notification to {self.owner_name}: {notification}" + (": " + comment if comment != "" else ""))
+            print(f"notification to {self.owner_name}: {notification}" + (": " + notification.get_text() if isinstance(notification, NewCommentNotification) else ""))
 
-    def print_all(self):
+    def print_all(self) -> None:
         for notification in self.notifications:
             print(notification)
