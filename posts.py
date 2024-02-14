@@ -30,13 +30,13 @@ class Post(ABC):
         """Notifies the post that a user has liked it"""
         self._likes.add(liker)  # add the liker to the likers set
         if liker != self._poster:   # if not self-like, notify the poster
-            self._poster.notify(NewLikeNotification(liker))
+            self._poster.get_inbox().notify(NewLikeNotification(liker))
 
     def comment(self, commenter: 'User', text: str) -> None:
         """Notifies the post that a user has commented on it"""
         self._comments.append((commenter, text))    # add the commenter and text to the comments
         if commenter != self._poster:      # if not self-comment, notify the poster
-            self._poster.notify(NewCommentNotification(commenter, text))
+            self._poster.get_inbox().notify(NewCommentNotification(commenter, text))
 
 
 class TextPost(Post):

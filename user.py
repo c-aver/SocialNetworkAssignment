@@ -36,9 +36,9 @@ class User:
         """Returns the user's name"""
         return self.__name
 
-    def notify(self, notification: Notification) -> None:
-        """Sends a notification to the user through its inbox"""
-        self.__inbox.notify(notification)
+    def get_inbox(self) -> Inbox:
+        """Get the user's inbox, mainly in order to send them a notification"""
+        return self.__inbox
 
     def __str__(self) -> str:
         return (f"User name: {self.__name}, "
