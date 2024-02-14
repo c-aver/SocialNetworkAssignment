@@ -32,11 +32,11 @@ class User:
         self.__posts = []
         self.__inbox = Inbox(self.__name)
 
-    def get_name(self):
+    def get_name(self) -> str:
         """Returns the user's name"""
         return self.__name
 
-    def notify(self, notification: Notification):
+    def notify(self, notification: Notification) -> None:
         """Sends a notification to the user through its inbox"""
         self.__inbox.notify(notification)
 
@@ -52,21 +52,21 @@ class User:
 
     def log_out(self) -> None:
         """Logs the user out of the network"""
-        self.check_login("log out")
+        self.__check_login("log out")
         self.__logged_in = False
         print(f"{self.__name} disconnected")
 
     def log_in(self, password: str) -> None:
         """Logs the user into of the network, given the correct password"""
         if self.__logged_in:
-            raise RuntimeError("Attempted ")
+            raise RuntimeError("Attempted to log-in while already logged-in")
         self.authenticate(password)
         self.__logged_in = True
         print(f"{self.__name} connected")
 
     def follow(self, other: User) -> None:
         """Makes the user follow another user"""
-        self.check_login("follow a user")
+        self.__check_login("follow a user")
         print(f"{self.__name} started following {other.__name}")    # pylint: disable=protected-access
         other._add_follower(self)                                   # pylint: disable=protected-access
 
@@ -75,16 +75,16 @@ class User:
 
     def unfollow(self, other: User) -> None:
         """Makes the user unfollow another user"""
-        self.check_login("unfollow a user")
+        self.__check_login("unfollow a user")
         print(f"{self.__name} unfollowed {other.__name}")           # pylint: disable=protected-access
         other._remove_follower(self)                                # pylint: disable=protected-access
 
     def _remove_follower(self, other: User) -> None:
         self.__follower_inboxes.remove(other.__inbox)               # pylint: disable=protected-access
 
-    def publish_post(self, post_type: str, text: str, price: int = 0, location: str = ""):
+    def publish_post(self, post_type: str, text: str, price: int = 0, location: str = "") -> Post:
         """Publishes a post by this user, given the post information"""
-        self.check_login("publish post")
+        self.__check_login("publish post")
         new_post: Post = create_post(self, post_type, text, price, location)
         self.__posts.append(new_post)
         # publish the post notification to all subscribers
@@ -92,13 +92,13 @@ class User:
             inbox.notify(NewPostNotification(self))
         return new_post
 
-    def print_notifications(self):
+    def print_notifications(self) -> None:
         """Print the user's notifications"""
-        self.check_login("check notifications")
+        self.__check_login("check notifications")
         print(f"{self.__name}'s notifications:")
         self.__inbox.print_all()
 
-    def check_login(self, action: str):
+    def __check_login(self, action: str) -> None:
         """Makes sure the user is logged in, otherwise raises RuntimeError"""
         if not self.__logged_in:
             raise RuntimeError(f"Tried to {action} while not logged in")
