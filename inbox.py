@@ -5,23 +5,23 @@ from notifications import Notification, NewPostNotification, NewCommentNotificat
 
 class Inbox:
     """A subscriber class for collecting notifications for a user"""
-    owner_name: str
-    notifications: List[Notification]
+    __owner_name: str
+    __notifications: List[Notification]
 
     def __init__(self, owner_name: str):
-        self.owner_name = owner_name
-        self.notifications = []
+        self.__owner_name = owner_name
+        self.__notifications = []
 
     def notify(self, notification: Notification) -> None:
         """Adds a notification to the inbox"""
-        self.notifications.append(notification)
+        self.__notifications.append(notification)
         if not isinstance(notification, NewPostNotification):
-            print(f"notification to {self.owner_name}: {notification}"
+            print(f"notification to {self.__owner_name}: {notification}"
                   + (": " + notification.get_text()
                      if isinstance(notification, NewCommentNotification)
                      else ""))
 
     def print_all(self) -> None:
         """Prints all user notifications as a list"""
-        for notification in self.notifications:
+        for notification in self.__notifications:
             print(notification)

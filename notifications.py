@@ -4,10 +4,10 @@ from abc import ABC, abstractmethod
 
 class Notification(ABC):                        # pylint: disable=too-few-public-methods
     """The abstract class that holds the info common to all notifications"""
-    other: 'User'
+    _other: 'User'  # the other user connected to the notification (meaning dependent on class)
 
     def __init__(self, other: 'User'):
-        self.other = other
+        self._other = other
 
     @abstractmethod
     def __str__(self) -> str:
@@ -18,14 +18,14 @@ class NewPostNotification(Notification):        # pylint: disable=too-few-public
     """Represents a new post notification for followers"""
 
     def __str__(self) -> str:
-        return f"{self.other.get_name()} has a new post"
+        return f"{self._other.get_name()} has a new post"
 
 
 class NewLikeNotification(Notification):        # pylint: disable=too-few-public-methods
     """Represents a new like notification for the poster"""
 
     def __str__(self) -> str:
-        return f"{self.other.get_name()} liked your post"
+        return f"{self._other.get_name()} liked your post"
 
 
 class NewCommentNotification(Notification):     # pylint: disable=too-few-public-methods
@@ -41,4 +41,4 @@ class NewCommentNotification(Notification):     # pylint: disable=too-few-public
         return self.__text
 
     def __str__(self) -> str:
-        return f"{self.other.get_name()} commented on your post"
+        return f"{self._other.get_name()} commented on your post"

@@ -30,7 +30,7 @@ class SocialNetwork:
 
     def sign_up(self, username: str, password: str) -> User:
         """
-        Created a new user and adds it to the network
+        Creates a new user and adds it to the network
         :param username: username for the new user
         :param password: password for the new user
         :return: the newly created user
