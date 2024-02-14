@@ -36,7 +36,7 @@ class NewCommentNotification(Notification):     # pylint: disable=too-few-public
         super().__init__(commenter)
         self.__text = text
 
-    def get_text(self) -> str:
+    def get_text(self) -> str:  # for printing upon new notification
         """Returns the text of the comment being notified on"""
         return self.__text
 

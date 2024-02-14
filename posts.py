@@ -9,16 +9,18 @@ from notifications import NewCommentNotification, NewLikeNotification
 
 class Post(ABC):
     """The abstract class for a post with its basic information"""
-    _poster: 'User'
+    _poster: 'User'     # the user that posted the post
 
-    _content: str
+    _content: str       # the content, either text or image file path
 
-    _likes: Set['User'] = set()
-    _comments: List[Tuple['User', str]] = []
+    _likes: Set['User']                     # the set of users that liked the post
+    _comments: List[Tuple['User', str]]     # the list of comments, commenter and content
 
     def __init__(self, poster: 'User', text: str):
         self._poster = poster
         self._content = text
+        self._likes = set()
+        self._comments = []
 
     @abstractmethod
     def __str__(self) -> str:
@@ -26,14 +28,14 @@ class Post(ABC):
 
     def like(self, liker: 'User') -> None:
         """Notifies the post that a user has liked it"""
-        self._likes.add(liker)
-        if liker != self._poster:
+        self._likes.add(liker)  # add the liker to the likers set
+        if liker != self._poster:   # if not self-like, notify the poster
             self._poster.notify(NewLikeNotification(liker))
 
     def comment(self, commenter: 'User', text: str) -> None:
         """Notifies the post that a user has commented on it"""
-        self._comments.append((commenter, text))
-        if commenter != self._poster:
+        self._comments.append((commenter, text))    # add the commenter and text to the comments
+        if commenter != self._poster:      # if not self-comment, notify the poster
             self._poster.notify(NewCommentNotification(commenter, text))
 
 
@@ -57,12 +59,13 @@ class ImagePost(Post):
     def display(self) -> None:
         """Attempts to display the image within the post"""
         try:
+            # lines of codes to show image using matplotlib
             plt.imshow(img.imread(self._content))
             plt.axis("off")
             plt.tight_layout()
             plt.show(block=False)
         except Exception as e:      # if we failed, that's fine # pylint: disable=broad-exception-caught
-            logging.exception(e)
+            logging.exception(e)    # log to prevent warning on exception
         print("Shows picture")
 
     def __str__(self) -> str:
@@ -72,34 +75,34 @@ class ImagePost(Post):
 class SalePost(Post):
     """A concrete class for a sale post"""
     # in the assignment output, the price changes type when a discount is applied
-    __price: Union[int, float]
-    __location: str
-    __already_sold: bool
+    __price: Union[int, float]  # the price of the sale
+    __location: str             # location of pickup
+    __already_sold: bool        # whether the item was sold
 
     def __init__(self, poster: 'User', text: str, price: int, location: str):
         super().__init__(poster, text)
         self.__price = price
         self.__location = location
-        self.__already_sold = False
+        self.__already_sold = False     # initially item is not sold
         print(self)
 
-    def discount(self, discount: int, password: str) -> None:
+    def discount(self, discount_percent: int, password: str) -> None:
         """Sets a discount on the sale, given the seller password"""
-        self._poster.authenticate(password)
-        if self.__already_sold:
+        self._poster.authenticate(password)     # make sure password is correct for poster
+        if self.__already_sold:     # make sure item is not already sold
             raise RuntimeError("Can't discount an already sold item.")
-        self.__price -= self.__price * discount / 100
+        self.__price -= self.__price * discount_percent / 100   # discount the price
         print(f"Discount on {self._poster.get_name()} product! the new price is: {self.__price}")
 
     def sold(self, password: str) -> None:
         """Defines the sale as sold, given the seller password"""
-        self._poster.authenticate(password)
-        self.__already_sold = True
+        self._poster.authenticate(password)     # make sure password is correct for poster
+        self.__already_sold = True              # mark post as sold
         print(f"{self._poster.get_name()}'s product is sold")
 
     def __str__(self) -> str:
         return (f"{self._poster.get_name()} posted a product for sale:\n"
-                + ("Sold" if self.__already_sold else "For sale")
+                + ("Sold" if self.__already_sold else "For sale")   # print correct description
                 + f"! {self._content}, price: {self.__price}, pickup from: {self.__location}\n")
 
 

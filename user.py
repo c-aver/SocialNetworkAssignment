@@ -14,23 +14,23 @@ def hash_str(s: str) -> bytes:
 
 class User:
     """This class represents a user in the network"""
-    __name: str
-    __pass_hash: bytes
+    __name: str             # the username
+    __pass_hash: bytes      # the user's password's hash, for authentication
 
-    __logged_in: bool
+    __logged_in: bool       # whether the user is currently logged in
 
-    __follower_inboxes: Set[Inbox]
-    __posts: List['Post']
+    __follower_inboxes: Set[Inbox]  # the follower inboxes, for notifying of a new post
+    __posts: List['Post']           # the user's posts
 
-    __inbox: Inbox
+    __inbox: Inbox                  # the user's notification inbox
 
     def __init__(self, name: str, password: str):
         self.__name = name
-        self.__pass_hash = hash_str(password)
-        self.__logged_in = True
-        self.__follower_inboxes = set()
-        self.__posts = []
-        self.__inbox = Inbox(self.__name)
+        self.__pass_hash = hash_str(password)   # save the hash of the given password
+        self.__logged_in = True                 # initially user is logged in
+        self.__follower_inboxes = set()         # initialize follower inboxes as empty set
+        self.__posts = []                       # initialize posts as empty list
+        self.__inbox = Inbox(self.__name)       # initialize inbox with a new inbox
 
     def get_name(self) -> str:
         """Returns the user's name"""
@@ -47,7 +47,7 @@ class User:
 
     def authenticate(self, password: str) -> None:
         """Checks that the given password is correct for the user, otherwise raises ValueError"""
-        if hash_str(password) != self.__pass_hash:
+        if hash_str(password) != self.__pass_hash:  # compare given password hash with stored hash
             raise ValueError(f"Incorrect password for {self.__name}")
 
     def log_out(self) -> None:
@@ -64,6 +64,8 @@ class User:
         self.__logged_in = True
         print(f"{self.__name} connected")
 
+    # the following 4 methods are for following and unfollowing
+    # for each function there is one for the follower and one for the newly followed
     def follow(self, other: User) -> None:
         """Makes the user follow another user"""
         self.__check_login("follow a user")
@@ -84,21 +86,25 @@ class User:
 
     def publish_post(self, post_type: str, text: str, price: int = 0, location: str = "") -> Post:
         """Publishes a post by this user, given the post information"""
-        self.__check_login("publish post")
-        new_post: Post = create_post(self, post_type, text, price, location)
-        self.__posts.append(new_post)
+        self.__check_login("publish post")      # make sure user is logged in
+        new_post: Post = create_post(self, post_type, text, price, location)    # create a new post
+        self.__posts.append(new_post)       # add the new post to the user's post list
         # publish the post notification to all subscribers
         for inbox in self.__follower_inboxes:
             inbox.notify(NewPostNotification(self))
-        return new_post
+        return new_post     # return the new post
 
     def print_notifications(self) -> None:
         """Print the user's notifications"""
-        self.__check_login("check notifications")
+        self.__check_login("check notifications")   # make sure user is logged in
         print(f"{self.__name}'s notifications:")
         self.__inbox.print_all()
 
     def __check_login(self, action: str) -> None:
-        """Makes sure the user is logged in, otherwise raises RuntimeError"""
+        """
+        This method makes sure the user is logged in when performing an action
+        :param action: a string representing the actions being attempted
+        :return: nothing, raises RuntimeError if user is not logged in
+        """
         if not self.__logged_in:
             raise RuntimeError(f"Tried to {action} while not logged in")
