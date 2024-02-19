@@ -3,7 +3,7 @@ from __future__ import annotations
 import hashlib
 from typing import Set, List
 from posts import Post, create_post
-from notifications import NewPostNotification, Notification
+from notifications import NewPostNotification
 from inbox import Inbox
 
 
