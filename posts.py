@@ -68,8 +68,8 @@ class ImagePost(Post):
             plt.axis("off")
             plt.tight_layout()
             plt.show(block=False)
-        except Exception as ex:      # if we failed, that's fine # pylint: disable=broad-exception-caught
-            logging.exception(ex)    # log to prevent warning on exception
+        except FileNotFoundError:      # if we failed, that's fine
+            pass
         print("Shows picture")
 
     def __str__(self) -> str:
