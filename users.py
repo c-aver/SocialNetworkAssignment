@@ -7,9 +7,9 @@ from notifications import NewPostNotification
 from inbox import Inbox
 
 
-def hash_str(s: str) -> bytes:
+def hash_str(to_hash: str) -> bytes:
     """Hash a string using SHA-256"""
-    return hashlib.sha256(s.encode("utf-8")).digest()
+    return hashlib.sha256(to_hash.encode("utf-8")).digest()
 
 
 class User:
