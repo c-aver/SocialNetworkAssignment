@@ -2,7 +2,7 @@
 """This module introduces the SocialNetwork class, the main class in the project's logic"""
 from __future__ import annotations
 from typing import Dict, Union
-from user import User
+from users import User
 
 
 class SocialNetwork:

@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
-    from user import User
+    from users import User
 
 
 class Notification(ABC):                        # pylint: disable=too-few-public-methods

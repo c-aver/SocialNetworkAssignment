@@ -9,7 +9,7 @@ import matplotlib.image as img
 from notifications import NewCommentNotification, NewLikeNotification
 
 if TYPE_CHECKING:
-    from user import User
+    from users import User
 
 
 class Post(ABC):
