@@ -1,9 +1,8 @@
 """This module holds the posts classes with their hierarchy"""
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Set, List, Tuple, Union
 import logging
 from abc import ABC, abstractmethod
-from typing import Set, List, Tuple, Union
 import matplotlib.pyplot as plt
 import matplotlib.image as img
 from notifications import NewCommentNotification, NewLikeNotification
@@ -69,8 +68,8 @@ class ImagePost(Post):
             plt.axis("off")
             plt.tight_layout()
             plt.show(block=False)
-        except Exception as e:      # if we failed, that's fine # pylint: disable=broad-exception-caught
-            logging.exception(e)    # log to prevent warning on exception
+        except Exception as ex:      # if we failed, that's fine # pylint: disable=broad-exception-caught
+            logging.exception(ex)    # log to prevent warning on exception
         print("Shows picture")
 
     def __str__(self) -> str:
