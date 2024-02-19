@@ -1,12 +1,13 @@
 # module name must be in PascalCase for assignment # pylint: disable=invalid-name
 """This module introduces the SocialNetwork class, the main class in the project's logic"""
+from __future__ import annotations
 from typing import Dict, Union
 from user import User
 
 
 class SocialNetwork:
     """The class representing the entire social network, holds the main logic of the project"""
-    __instance: 'SocialNetwork' = None  # the singleton instance of this class
+    __instance: Union[SocialNetwork, None] = None  # the singleton instance of this class
 
     __name: str                         # the name of the social network
     __users: Dict[str, User] = {}       # the user data structure
@@ -18,7 +19,7 @@ class SocialNetwork:
         self.__instance = self
         print(f"The social network {self.__name} was created!")
 
-    def instance(self) -> 'SocialNetwork':
+    def instance(self) -> SocialNetwork:
         """Return the singleton instance of SocialNetwork"""
         if self.__instance is None:         # if an instance was not created yet
             self.__instance = SocialNetwork("Default")  # create a new one with some default name

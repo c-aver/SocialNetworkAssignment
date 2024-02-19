@@ -1,10 +1,15 @@
 """This module holds the posts classes with their hierarchy"""
+from __future__ import annotations
+from typing import TYPE_CHECKING
 import logging
 from abc import ABC, abstractmethod
 from typing import Set, List, Tuple, Union
 import matplotlib.pyplot as plt
 import matplotlib.image as img
 from notifications import NewCommentNotification, NewLikeNotification
+
+if TYPE_CHECKING:
+    from user import User
 
 
 class Post(ABC):

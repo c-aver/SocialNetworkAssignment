@@ -1,5 +1,10 @@
 """Holds the various notification classes and their hierarchy"""
+from __future__ import annotations
+from typing import TYPE_CHECKING
 from abc import ABC, abstractmethod
+
+if TYPE_CHECKING:
+    from user import User
 
 
 class Notification(ABC):                        # pylint: disable=too-few-public-methods
