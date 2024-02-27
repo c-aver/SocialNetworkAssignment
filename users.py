@@ -14,23 +14,23 @@ def hash_str(to_hash: str) -> bytes:
 
 class User:
     """This class represents a user in the network"""
-    __name: str             # the username
-    __pass_hash: bytes      # the user's password's hash, for authentication
+    __name: str  # the username
+    __pass_hash: bytes  # the user's password's hash, for authentication
 
-    __logged_in: bool       # whether the user is currently logged in
+    __logged_in: bool  # whether the user is currently logged in
 
     __follower_inboxes: Set[Inbox]  # the follower inboxes, for notifying of a new post
-    __posts: List['Post']           # the user's posts
+    __posts: List[Post]  # the user's posts
 
-    __inbox: Inbox                  # the user's notification inbox
+    __inbox: Inbox  # the user's notification inbox
 
     def __init__(self, name: str, password: str):
         self.__name = name
-        self.__pass_hash = hash_str(password)   # save the hash of the given password
-        self.__logged_in = True                 # initially user is logged in
-        self.__follower_inboxes = set()         # initialize follower inboxes as empty set
-        self.__posts = []                       # initialize posts as empty list
-        self.__inbox = Inbox(self.__name)       # initialize inbox with a new inbox
+        self.__pass_hash = hash_str(password)  # save the hash of the given password
+        self.__logged_in = True  # initially user is logged in
+        self.__follower_inboxes = set()  # initialize follower inboxes as empty set
+        self.__posts = []  # initialize posts as empty list
+        self.__inbox = Inbox(self.__name)  # initialize inbox with a new inbox
 
     def get_name(self) -> str:
         """Returns the user's name"""
@@ -69,34 +69,34 @@ class User:
     def follow(self, other: User) -> None:
         """Makes the user follow another user"""
         self.__check_login("follow a user")
-        print(f"{self.__name} started following {other.__name}")    # pylint: disable=protected-access
-        other._add_follower(self)                                   # pylint: disable=protected-access
+        print(f"{self.__name} started following {other.__name}")  # pylint: disable=protected-access
+        other._add_follower(self)  # pylint: disable=protected-access
 
     def _add_follower(self, other: User) -> None:
-        self.__follower_inboxes.add(other.__inbox)                  # pylint: disable=protected-access
+        self.__follower_inboxes.add(other.__inbox)  # pylint: disable=protected-access
 
     def unfollow(self, other: User) -> None:
         """Makes the user unfollow another user"""
         self.__check_login("unfollow a user")
-        print(f"{self.__name} unfollowed {other.__name}")           # pylint: disable=protected-access
-        other._remove_follower(self)                                # pylint: disable=protected-access
+        print(f"{self.__name} unfollowed {other.__name}")  # pylint: disable=protected-access
+        other._remove_follower(self)  # pylint: disable=protected-access
 
     def _remove_follower(self, other: User) -> None:
-        self.__follower_inboxes.remove(other.__inbox)               # pylint: disable=protected-access
+        self.__follower_inboxes.remove(other.__inbox)  # pylint: disable=protected-access
 
     def publish_post(self, post_type: str, text: str, price: int = 0, location: str = "") -> Post:
         """Publishes a post by this user, given the post information"""
-        self.__check_login("publish post")      # make sure user is logged in
-        new_post: Post = create_post(self, post_type, text, price, location)    # create a new post
-        self.__posts.append(new_post)       # add the new post to the user's post list
+        self.__check_login("publish post")  # make sure user is logged in
+        new_post: Post = create_post(self, post_type, text, price, location)  # create a new post
+        self.__posts.append(new_post)  # add the new post to the user's post list
         # publish the post notification to all subscribers
         for inbox in self.__follower_inboxes:
             inbox.notify(NewPostNotification(self))
-        return new_post     # return the new post
+        return new_post  # return the new post
 
     def print_notifications(self) -> None:
         """Print the user's notifications"""
-        self.__check_login("check notifications")   # make sure user is logged in
+        self.__check_login("check notifications")  # make sure user is logged in
         print(f"{self.__name}'s notifications:")
         self.__inbox.print_all()
 
