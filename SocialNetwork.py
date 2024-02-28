@@ -13,8 +13,9 @@ class SocialNetwork:
     __users: Dict[str, User]  # the user data structure
 
     def __new__(cls, net_name: str):
-        if cls.__instance is None:  # if singleton instance does not exists
-            cls.__instance = super().__new__(cls)  # create it
+        if cls.__instance is not None:  # if singleton instance exists already
+            return cls.__instance       # return it
+        cls.__instance = super().__new__(cls)  # otherwise, create it
         cls.__instance.__name = net_name  # initialize values
         cls.__instance.__users = {}
         print(f"The social network {cls.__instance.__name} was created!")
