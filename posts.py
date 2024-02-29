@@ -69,7 +69,7 @@ class ImagePost(Post):
             plt.imshow(img.imread(self._content))
             plt.axis("off")
             plt.tight_layout()
-            plt.show(block=False)
+            plt.show()
         except FileNotFoundError:  # if we failed, that's fine
             pass
         print("Shows picture")
